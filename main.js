@@ -1,22 +1,25 @@
 function main()
 {
-    const theHobbit = new Book("The Hobbit", "J.R.R Tolkien", 295, false);
-    const twoCities = new Book("A tale of two cities", "Charles Dickens", 345, true);
-
-    let bookArray=[]
+    let bookArray=[];
+    const theHobbit = new Book("The Hobbit", "someone", 234, false);
     bookArray.push(theHobbit);
-    bookArray.push(twoCities);
     let button = document.querySelector("button");
+    let table = document.createElement("table");
+    let tableHolder = document.querySelector("#container");
+    tableHolder.appendChild(table);
+    createTableHeaders(bookArray[0], table);
+    createBookData(bookArray, table); 
     button.addEventListener('click', (e) =>{
         e.preventDefault(); // prevents the form form thinking the button is sending get request
         addBookToLibrary(bookArray);
+        tableHolder.appendChild(table);
+        createTableHeaders(bookArray[0], table);
+        createBookData(bookArray, table);  
     });
-    //createTable(bookArray);
-    getTableRowData(theHobbit);
-    getTableData(bookArray);
-   // display(bookArray, bookArray[0]);
 }
 main()
+
+
 
 
 function Book(title, author, numPages, read)
@@ -24,13 +27,12 @@ function Book(title, author, numPages, read)
     this.title = title;
     this.author = author;
     this.numPages = numPages;
-    this.read = read ? "already read" : "not read yet";
+    this.read = read ? "Already read" : "Not read yet";
     
     this.info = function()
     {
         return `${this.title} by ${this.author}, ${this.numPages} pages, ${this.read}`;
     }
-    console.log(typeof this.info === 'function');
 }
 
 function addBookToLibrary(array)
@@ -41,36 +43,11 @@ function addBookToLibrary(array)
     let read = parseInt(document.getElementById("read").value);
     const newBook = new Book(title, author, pages, read);
     array.push(newBook);
-    return console.log(array);
 }
 
-
-function createTable(obj)
+function createTableHeaders(obj, table)
 {
-    let table = document.querySelector('table');
-
-    for (let i = 0; i < 4; i++)
-    {
-        let row = document.createElement("TR");
-    }
-}
-function display(array, book)
-{
-    let titleRow = table.querySelector("#titleRow");
-    let title = document.createElement("TD");
-    title.textContent = book.title;
-
-    titleRow.appendChild(title);
-
-    array.forEach(book => {
-
-        
-    });
-}
-
-function getTableRowData(obj)
-{
-    let table = document.querySelector('table');
+    table.innerHTML = "";
     let tr = document.createElement("TR");
     table.appendChild(tr);
     rowArray = Object.keys(obj);
@@ -85,14 +62,13 @@ function getTableRowData(obj)
         }
         
     });
+    
 }
 
-function getTableData(array)
+function createBookData(array, table)
 {
-    let table = document.querySelector("table");
+    //let table = document.querySelector("table");
     
-    
-
     array.forEach(book => {
 
         let row = document.createElement("TR");
@@ -100,6 +76,9 @@ function getTableData(array)
         let author = document.createElement("TD");
         let pages = document.createElement("TD");
         let read = document.createElement("TD");
+        let readButton = document.createElement("button");
+        let remove = document.createElement("TD");
+        let removeButton = document.createElement("button");
         
         table.appendChild(row);
 
@@ -112,8 +91,49 @@ function getTableData(array)
         pages.innerHTML = book.numPages;
         row.appendChild(pages);
         
-        read.innerHTML = book.read;
+        read.appendChild(readButton);
+        readButton.textContent = book.read;
+        readButton.classList.add("read");
         row.appendChild(read);  
+        addReadButtonListeners(book);
+
+        remove = removeButton;
+        removeButton.textContent = "Remove";
+        removeButton.classList.add("remove");
+        row.appendChild(remove);
+        addRemoveButtonListeners(array);
+    });
+    
+}
+
+function addReadButtonListeners(obj)
+{
+    buttons = document.querySelectorAll(".read");
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+
+            if (obj.read === "Already read")
+            {
+                obj.read = "Not read yet";
+            }
+            else
+            {
+                obj.read = "Already read";
+            }
+            button.textContent = obj.read;
+        });
+    });
+}
+
+function addRemoveButtonListeners(array)
+{
+    buttons = document.querySelectorAll(".remove");
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+
+             button.parentNode.remove();
+             array.pop();
+        });
     });
 }
 

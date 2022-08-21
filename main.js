@@ -11,27 +11,27 @@ function main()
         e.preventDefault(); // prevents the form form thinking the button is sending get request
         addBookToLibrary(bookArray);
     });
-    display(bookArray, bookArray[0]);
+    //createTable(bookArray);
+    getTableRowData(theHobbit);
+    getTableData(bookArray);
+   // display(bookArray, bookArray[0]);
 }
 main()
 
 
 function Book(title, author, numPages, read)
 {
-    this.title = title,
-    this.author = author,
-    this.numPages = numPages,
+    this.title = title;
+    this.author = author;
+    this.numPages = numPages;
     this.read = read ? "already read" : "not read yet";
     
     this.info = function()
     {
         return `${this.title} by ${this.author}, ${this.numPages} pages, ${this.read}`;
     }
+    console.log(typeof this.info === 'function');
 }
-
-
-
-
 
 function addBookToLibrary(array)
 {
@@ -44,11 +44,79 @@ function addBookToLibrary(array)
     return console.log(array);
 }
 
-function display(array, book)
-{   let table = document.querySelector('table');
-    let tr = document.createElement("TR");
-    tr.textContent = book.title;
-    table.appendChild(tr);
+
+function createTable(obj)
+{
+    let table = document.querySelector('table');
+
+    for (let i = 0; i < 4; i++)
+    {
+        let row = document.createElement("TR");
+    }
 }
+function display(array, book)
+{
+    let titleRow = table.querySelector("#titleRow");
+    let title = document.createElement("TD");
+    title.textContent = book.title;
+
+    titleRow.appendChild(title);
+
+    array.forEach(book => {
+
+        
+    });
+}
+
+function getTableRowData(obj)
+{
+    let table = document.querySelector('table');
+    let tr = document.createElement("TR");
+    table.appendChild(tr);
+    rowArray = Object.keys(obj);
+    rowArray.forEach(key => {
+    
+        if(key !== "info" )
+        {
+            let th = document.createElement("TH");
+            th.id = key;
+            th.innerHTML = key.toUpperCase();
+            tr.appendChild(th);
+        }
+        
+    });
+}
+
+function getTableData(array)
+{
+    let table = document.querySelector("table");
+    
+    
+
+    array.forEach(book => {
+
+        let row = document.createElement("TR");
+        let title = document.createElement("TD");
+        let author = document.createElement("TD");
+        let pages = document.createElement("TD");
+        let read = document.createElement("TD");
+        
+        table.appendChild(row);
+
+        title.innerHTML = book.title;
+        row.appendChild(title);    
+            
+        author.innerHTML = book.author;
+        row.appendChild(author);
+
+        pages.innerHTML = book.numPages;
+        row.appendChild(pages);
+        
+        read.innerHTML = book.read;
+        row.appendChild(read);  
+    });
+}
+
+
 
 
